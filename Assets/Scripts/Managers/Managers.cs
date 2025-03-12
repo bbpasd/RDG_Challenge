@@ -15,6 +15,16 @@ public class Managers : MonoBehaviour {
     public static Managers Instance => Init();
     #endregion
 
+    public static Player_Hero _player;
+    public static Player_Hero Player {
+        get {
+            if (_player == null) {
+                _player = FindObjectOfType<Player_Hero>();
+            }
+            return _player;
+        }
+    }
+
     private static Managers Init() {
         if (_instance == null) {
             _instance = FindObjectOfType<Managers>();
@@ -26,4 +36,6 @@ public class Managers : MonoBehaviour {
         }
         return _instance;
     }
+
+    
 }
