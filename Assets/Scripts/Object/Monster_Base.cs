@@ -21,8 +21,10 @@ public class Monster_Base : Object_Base
         
     }
 
-    private void Start() {
+    protected void Start() {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
+        
     }
 
     private void FixedUpdate() {

@@ -71,14 +71,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
-  maxHp: 10
+  maxHp: 50
   attackPower: 10
-  moveSpeed: 1
+  moveSpeed: 2
   jumpPower: 5
   spawnWay: 1
   frontMonster: {fileID: 0}
   upMonster: {fileID: 0}
-  testJump: 0
 --- !u!61 &8001011632231966563
 BoxCollider2D:
   m_ObjectHideFlags: 0

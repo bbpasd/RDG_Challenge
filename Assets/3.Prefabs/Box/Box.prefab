@@ -69,7 +69,7 @@ RectTransform:
   m_Father: {fileID: 4275079931531570784}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0.362}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -421,7 +421,7 @@ GameObject:
   - component: {fileID: 8118567993726817919}
   - component: {fileID: 8647925205152448110}
   - component: {fileID: 8122801877018022535}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Box
   m_TagString: Hero
   m_Icon: {fileID: 0}
@@ -488,7 +488,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1.55}
+  m_Size: {x: 2, y: 1.5}
   m_EdgeRadius: 0
 --- !u!114 &8647925205152448110
 MonoBehaviour:
