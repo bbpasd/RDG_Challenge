@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour {
     public int bulletNum = 5;
     public float bulletSpreadAngle = 10f;
     public float shootInterval = 1.0f;
-
+    public Vector3 shootTargetPosition = Vector3.zero;
     public bool gameRunning = true; // temp
 
-    public bool isClick = false;
+    public bool isMouseHeld = false;
 
     private float gunRotateWeight = 30; // 총 이미지가 기본적으로 위로 올라가있어서 보정해주는 값
 
@@ -32,31 +32,32 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
-        //if (Input.GetMouseButtonDown(0)) {
-        //    OnMouseClick();
-        //}
+        if (Input.GetMouseButton(0)) {
+            isMouseHeld = true;
+            OnMouseClick();
+        }
+        else {
+            isMouseHeld = false;
+        }
     }
 
     private void OnMouseClick() {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
-        Debug.Log("마우스 클릭 위치: " + mousePos);
+        shootTargetPosition = mousePos;
+        RotateGunToTarget(shootTargetPosition);
     }
 
     private IEnumerator StartShoot() {
         while (true) {
             if (!gameRunning) break;
-            Vector3 target = Vector3.zero;
-            if (isClick) {
 
-            }
-            else {
-                target = FindClosestTarget();
-                if (target != null) {
-                    Shoot(target);
-                }
+            //  마우스를 누르는 중에는 타겟을 따로 탐색하지 않음
+            if (!isMouseHeld) {
+                shootTargetPosition = FindClosestTarget();
             }
 
+            Shoot(shootTargetPosition);
             yield return new WaitForSeconds(shootInterval);
         }
     }
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour {
 
     private void RotateGunToTarget(Vector3 targetPos) {
         if (gunObject == null) return;
+
         Vector2 direction = (targetPos - gunObject.transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         gunObject.transform.rotation = Quaternion.Euler(0f, 0f, angle - gunRotateWeight);
