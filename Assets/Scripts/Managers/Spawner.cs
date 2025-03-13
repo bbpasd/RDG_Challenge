@@ -10,11 +10,14 @@ public class Spawner : MonoBehaviour {
     public GameObject monsterPrefab;
     public Transform spawnPoint;
     public float spawnInterval = 2f;
-    public float[] spawnHeights = new float[] {-3.22f, -3.72f, -2.72f }; // 스폰 y좌표 길 3개
-    public int SPAWNWAY = 1;    // TEST 일단 길 1군데에서만 스폰됨
+    public int SPAWNWAY = 1;    // TEST용값 = 1
+    public float[] spawnHeights = new float[] {-2.72f, -3.22f, -3.72f }; // 스폰 y좌표 길 3개
     public string[] spawnLayers = new string[] { "MonsterWay1", "MonsterWay2", "MonsterWay3" };
 
-    public Transform monsterParent;
+    private int monsterCount = 0;
+    public Transform[] monsterParent;
+    public Transform monsterParent2;
+    public Transform monsterParent3;
 
     public static Spawner Instance => Init();
 
@@ -35,7 +38,11 @@ public class Spawner : MonoBehaviour {
     private void InitInstance() {
         if (spawnPoint == null) {
             spawnPoint = transform; // 스폰 포인트는 일단 스포너 오브젝트의 위치로
-            monsterParent = new GameObject("@Monster").transform;
+            monsterParent = new Transform[] {
+                new GameObject("@Monster1").transform,
+                new GameObject("@Monster2").transform,
+                new GameObject("@Monster3").transform
+            };
         }
     }
 
@@ -48,11 +55,12 @@ public class Spawner : MonoBehaviour {
             int spawnWay = UnityEngine.Random.Range(1, SPAWNWAY + 1);
             int spawnIndex =  spawnWay - 1;
             
-            Vector3 spawnPosition = new Vector3(spawnPoint.position.x, spawnHeights[spawnIndex], spawnPoint.position.z);
+            Vector3 spawnPosition = new Vector3(spawnPoint.position.x, spawnHeights[spawnIndex] +0.1f, spawnPoint.position.z);
             GameObject monster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
             monster.GetComponent<Monster_Base>().spawnWay = spawnWay;
             monster.layer = LayerMask.NameToLayer(spawnLayers[spawnIndex]);
-            monster.transform.parent = monsterParent;
+            monster.transform.parent = monsterParent[spawnIndex];
+            monster.name = monster.name + monsterCount++;
 
             yield return new WaitForSeconds(spawnInterval);
         }
