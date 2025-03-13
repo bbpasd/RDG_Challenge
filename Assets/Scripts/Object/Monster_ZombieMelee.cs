@@ -10,6 +10,11 @@ public class Monster_ZombieMelee : Monster_Base
     }
 
     private void MoveToPlayer() {
+        if (Managers.Player == null) {
+            Debug.LogError("Player not found.");
+            return;
+        }
+
         //Vector3 direction = (Managers.Player.transform.position - transform.position).normalized;
         Vector3 playerPos = Managers.Player.transform.position;
         Vector3 targetPos = new Vector3(playerPos.x, transform.position.y, playerPos.z);

@@ -10,7 +10,7 @@ public class Scene_GameStage : Scene_Base
 
     private void Awake() {
         if (stageSettings == null) {
-            Debug.LogError($"Stage Settings not found in {gameObject.name} scene.");
+            Debug.LogError($"Stage Settings not found.");
             return;
         }
 

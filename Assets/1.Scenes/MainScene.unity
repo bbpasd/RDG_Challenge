@@ -819,7 +819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 319310827380095937, guid: e48e7c461a85c463cba5a999afb91a67, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1174570720321624928, guid: e48e7c461a85c463cba5a999afb91a67, type: 3}
       propertyPath: m_RootOrder
@@ -1461,6 +1461,11 @@ MonoBehaviour:
   monsterPrefab: {fileID: 319310827380095937, guid: e48e7c461a85c463cba5a999afb91a67, type: 3}
   spawnPoint: {fileID: 0}
   spawnInterval: 3
+  spawnHeights:
+  - -3.22
+  - -3.72
+  - -2.72
+  SPAWNWAY: 1
 --- !u!4 &2074245152
 Transform:
   m_ObjectHideFlags: 0
