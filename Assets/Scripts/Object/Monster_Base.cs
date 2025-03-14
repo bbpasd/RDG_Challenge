@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster_Base : Object_Base
-{
+public class Monster_Base : Object_Base {
     protected bool isMoving = true;
     protected Vector2 previousPos;
     protected Rigidbody2D rb;
@@ -17,14 +16,11 @@ public class Monster_Base : Object_Base
 
     public override void OnAttack(float amount) {
         base.OnAttack(amount);
-
-        
     }
 
     protected void Start() {
         base.Start();
         rb = GetComponent<Rigidbody2D>();
-        
     }
 
     private void FixedUpdate() {
@@ -43,15 +39,13 @@ public class Monster_Base : Object_Base
         rb.velocity = new Vector2(Vector2.left.x * moveSpeed, rb.velocity.y);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Hero")) {
-            transform.position = previousPos;   // 움직임 복귀 (박스를 조금 밀어버리는 문제 해결)
+            //transform.position = previousPos;
             isMoving = false;
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Monster")) {
             if (canJump(collision.transform)) {
                 frontMonster = collision.gameObject;
@@ -74,11 +68,14 @@ public class Monster_Base : Object_Base
     protected void Jump() {
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), true);
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        Invoke(nameof(ResetIgnoreCollision), 0.4f);
+        StartCoroutine(ResetIgnoreCollision());
+
     }
 
-    protected void ResetIgnoreCollision() {
-        if (frontMonster == null) return;
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), false);
+    protected IEnumerator ResetIgnoreCollision() {
+        yield return new WaitForSeconds(0.4f);
+        if (frontMonster != null) {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), false);
+        }
     }
 }
