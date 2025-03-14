@@ -10,9 +10,15 @@ public class Object_Base : MonoBehaviour
     public float currentHp;
     public float maxHp = 10.0f;
     public float attackPower = 10.0f;
+    public float attackInterval = 1.0f;
     public bool isAttackedOnShot = false;
+    public bool isAttacking = false;
+    public Object_Base attackTarget;
+
     public GameObject hpPanel;
     public Slider hpSlider;
+
+    private bool isDie = false;
 
     protected void Start() {
         currentHp = maxHp;
@@ -21,10 +27,15 @@ public class Object_Base : MonoBehaviour
 
     }
 
+    public virtual void Attack() {
+
+    }
+
     public virtual void OnAttack(float amount) {
         currentHp -= amount;
-        if (currentHp <= 0) {
+        if (currentHp <= 0 && !isDie) {
             currentHp = 0;
+            isDie = true;
             Die();
 
             return;
@@ -37,6 +48,10 @@ public class Object_Base : MonoBehaviour
             
         }
         UpdateHpBar();
+    }
+
+    public virtual void AttackEvent() {
+        attackTarget.OnAttack(attackPower);
     }
 
     public virtual void Die() {

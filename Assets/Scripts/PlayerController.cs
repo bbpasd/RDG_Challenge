@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Start() {
         bulletDamage = GetComponent<Player_Hero>().attackPower;
+        shootInterval = GetComponent<Player_Hero>().attackInterval;
 
         bulletParent = GameObject.Find("@Bullet")?.transform;
         if (bulletParent == null) {

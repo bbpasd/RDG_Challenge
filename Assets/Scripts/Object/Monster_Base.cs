@@ -5,7 +5,7 @@ using UnityEngine;
 public class Monster_Base : Object_Base {
     protected bool isMoving = true;
     protected Vector2 previousPos;
-    protected Rigidbody2D rb;
+    protected Rigidbody2D _rb;
 
     public float moveSpeed = 5.0f;
     public float jumpPower = 5.0f;
@@ -14,19 +14,34 @@ public class Monster_Base : Object_Base {
     public GameObject frontMonster;
     public GameObject upMonster;
 
-    public override void OnAttack(float amount) {
-        base.OnAttack(amount);
-    }
+    protected Animator _animator;
+    private float attackAnimationDuration;
+
+    
 
     protected void Start() {
         base.Start();
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+
+        AnimatorClipInfo[] clipInfos = _animator.GetCurrentAnimatorClipInfo(0);
+        if (clipInfos.Length > 0 && clipInfos[0].clip.name.Contains("Attack")) {
+            attackAnimationDuration = clipInfos[0].clip.length;
+        }
+
     }
 
     private void FixedUpdate() {
         if (isMoving) {
             previousPos = transform.position;
             MoveToPlayer();
+
+            _animator?.SetBool("IsIdle", true);
+            _animator?.SetBool("IsAttacking", false);
+        }
+        if (isAttacking) {
+            _animator?.SetBool("IsIdle", false);
+            _animator?.SetBool("IsAttacking", true);
         }
     }
 
@@ -36,14 +51,17 @@ public class Monster_Base : Object_Base {
             return;
         }
 
-        rb.velocity = new Vector2(Vector2.left.x * moveSpeed, rb.velocity.y);
+        _rb.velocity = new Vector2(Vector2.left.x * moveSpeed, _rb.velocity.y);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.CompareTag("Hero")) {
             //transform.position = previousPos;
             isMoving = false;
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            isAttacking = true;
+            _rb.velocity = new Vector2(0, _rb.velocity.y);
+            attackTarget = collision.GetComponent<Object_Base>();
+            Attack();
         }
 
         if (collision.gameObject.CompareTag("Monster")) {
@@ -67,7 +85,7 @@ public class Monster_Base : Object_Base {
 
     protected void Jump() {
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), true);
-        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        _rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         StartCoroutine(ResetIgnoreCollision());
 
     }
