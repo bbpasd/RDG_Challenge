@@ -502,6 +502,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f6fc9a92282d04fb5337be5aac164c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHp: 0
+  maxHp: 200
+  attackPower: 10
+  attackInterval: 1
+  isAttackedOnShot: 0
+  isAttacking: 0
+  attackTarget: {fileID: 0}
+  hpPanel: {fileID: 0}
+  hpSlider: {fileID: 0}
 --- !u!50 &8122801877018022535
 Rigidbody2D:
   serializedVersion: 4

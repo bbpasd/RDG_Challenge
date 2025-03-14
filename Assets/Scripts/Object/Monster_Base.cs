@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster_Base : Object_Base {
-    protected bool isMoving = true;
+    public bool isPushingToBack = false;
+    public bool isMoving = true;
     protected Vector2 previousPos;
     protected Rigidbody2D _rb;
 
@@ -34,7 +35,7 @@ public class Monster_Base : Object_Base {
     private void FixedUpdate() {
         if (isMoving) {
             previousPos = transform.position;
-            MoveToPlayer();
+            Move();
 
             _animator?.SetBool("IsIdle", true);
             _animator?.SetBool("IsAttacking", false);
@@ -45,13 +46,19 @@ public class Monster_Base : Object_Base {
         }
     }
 
-    private void MoveToPlayer() {
+    protected virtual void Move() {
         if (Managers.Player == null) {
             Debug.LogError("Player not found.");
             return;
         }
 
-        _rb.velocity = new Vector2(Vector2.left.x * moveSpeed, _rb.velocity.y);
+        // 뒤로 밀려날 경우
+        if (isPushingToBack) {
+            _rb.velocity = new Vector2(Vector2.left.x * -moveSpeed, _rb.velocity.y);
+        }
+        else {
+            _rb.velocity = new Vector2(Vector2.left.x * moveSpeed, _rb.velocity.y);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -65,7 +72,8 @@ public class Monster_Base : Object_Base {
         }
 
         if (collision.gameObject.CompareTag("Monster")) {
-            if (canJump(collision.transform)) {
+            Debug.Log("점프 조건체크!");
+            if (CanJump(collision.transform)) {
                 frontMonster = collision.gameObject;
                 collision.GetComponent<Monster_Base>().upMonster = this.gameObject;
                 Jump();
@@ -73,7 +81,7 @@ public class Monster_Base : Object_Base {
         }
     }
 
-    protected bool canJump(Transform collision) {
+    protected bool CanJump(Transform collision) {
         return collision.GetComponent<Monster_Base>().upMonster == null && IsBehind(collision);
     }
 
@@ -86,14 +94,41 @@ public class Monster_Base : Object_Base {
     protected void Jump() {
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), true);
         _rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        StartCoroutine(ResetIgnoreCollision());
+        StartCoroutine(PushFrontMonsterToBack());
+        //StartCoroutine(ResetIgnoreCollision());
 
     }
 
+    // 점프하면서 지웠던 충돌해제 복구
     protected IEnumerator ResetIgnoreCollision() {
         yield return new WaitForSeconds(0.4f);
         if (frontMonster != null) {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), false);
+        }
+    }
+
+    // 점프하면서 앞에 있던 몬스터를 뒤로 밀어내면서 순환
+    protected IEnumerator PushFrontMonsterToBack() {
+        yield return new WaitForSeconds(0.2f); // 충돌 무시 해제 대기
+        if (frontMonster != null) {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), frontMonster.GetComponent<Collider2D>(), false);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        if (frontMonster != null) {
+            Monster_Base frontMB = frontMonster.GetComponent<Monster_Base>();
+            if (frontMonster != null) {
+                frontMB.isPushingToBack = true;
+                frontMB.isMoving = true;
+                frontMB.upMonster = null;
+            }
+
+            yield return new WaitForSeconds(0.3f);
+            frontMonster = null;
+            yield return new WaitForSeconds(0.4f);
+            if (frontMB != null) {
+                frontMB.isPushingToBack = false;
+            }
         }
     }
 }

@@ -6,5 +6,5 @@ using UnityEngine;
 public class Monster_ZombieMelee : Monster_Base
 {
     
-    // 필요시 작성
+    // 각 몬스터의 종류마다 특수한 능력이 있을 경우 작성
 }
