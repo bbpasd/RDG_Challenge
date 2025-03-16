@@ -1,3 +1,4 @@
 TDS 캐릭터 움직임, 공격 구현
 
-영상 url
+Youtube 영상
+https://youtu.be/z7eEEZbkW04
