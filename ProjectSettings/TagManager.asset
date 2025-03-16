@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hero
   - Monster
+  - Floor
   layers:
   - Default
   - TransparentFX

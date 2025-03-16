@@ -503,7 +503,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
-  maxHp: 200
+  maxHp: 2000
   attackPower: 10
   attackInterval: 1
   isAttackedOnShot: 0

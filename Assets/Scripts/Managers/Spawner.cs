@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour {
     public GameObject monsterPrefab;
     public Transform spawnPoint;
     public float spawnInterval = 2f;
-    public int SPAWNWAY = 1;    // TEST용값 = 1
+    public int SPAWNWAY_NUM = 1;    // TEST용값 = 1
     public float[] spawnHeights = new float[] {-2.72f, -3.22f, -3.72f }; // 스폰 y좌표 길 3개
     public string[] spawnLayers = new string[] { "MonsterWay1", "MonsterWay2", "MonsterWay3" };
 
@@ -52,7 +52,7 @@ public class Spawner : MonoBehaviour {
 
     private IEnumerator SpawnMonsters() {
         while (true) {
-            int spawnWay = UnityEngine.Random.Range(1, SPAWNWAY + 1);
+            int spawnWay = UnityEngine.Random.Range(1, SPAWNWAY_NUM + 1);
             int spawnIndex =  spawnWay - 1;
             
             Vector3 spawnPosition = new Vector3(spawnPoint.position.x, spawnHeights[spawnIndex] +0.1f, spawnPoint.position.z);
