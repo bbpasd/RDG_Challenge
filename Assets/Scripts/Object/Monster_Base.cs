@@ -102,7 +102,7 @@ public class Monster_Base : Object_Base {
 
     // 점프하면서 앞에 있던 몬스터를 뒤로 밀어내면서 순환
     protected IEnumerator PushFrontMonsterToBack() {
-        //yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f);
         
         if (frontMonster != null) {
             Monster_Base frontMB = frontMonster.GetComponent<Monster_Base>();
