@@ -10,14 +10,12 @@ public class Spawner : MonoBehaviour {
     public GameObject monsterPrefab;
     public Transform spawnPoint;
     public float spawnInterval = 2f;
-    public int SPAWNWAY_NUM = 1;    // TEST용값 = 1
-    public float[] spawnHeights = new float[] {-2.72f, -3.22f, -3.72f }; // 스폰 y좌표 길 3개
+    public int SPAWNWAY_NUM = 3;    // TEST용값 = 1
+    public float[] spawnHeights = new float[] {-2.72f, -3.22f, -3.72f }; // 스폰 y좌표 길 3개. 아래 변수들은 일단 전부 직접 3개씩 작성
     public string[] spawnLayers = new string[] { "MonsterWay1", "MonsterWay2", "MonsterWay3" };
 
     private int monsterCount = 0;
-    public Transform[] monsterParent;
-    public Transform monsterParent2;
-    public Transform monsterParent3;
+    public Transform[] monsterParent;   // 각 라인의 몬스터들을 배치할 곳, 
 
     public static Spawner Instance => Init();
 
@@ -51,6 +49,7 @@ public class Spawner : MonoBehaviour {
     }
 
     private IEnumerator SpawnMonsters() {
+        yield return new WaitForSeconds(3.0f); // 최초 대기 시간
         while (true) {
             int spawnWay = UnityEngine.Random.Range(1, SPAWNWAY_NUM + 1);
             int spawnIndex =  spawnWay - 1;
@@ -61,7 +60,6 @@ public class Spawner : MonoBehaviour {
             monster.layer = LayerMask.NameToLayer(spawnLayers[spawnIndex]);
             monster.transform.parent = monsterParent[spawnIndex];
             monster.name = monster.name + monsterCount++;
-
             yield return new WaitForSeconds(spawnInterval);
         }
     }

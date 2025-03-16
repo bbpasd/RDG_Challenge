@@ -28,7 +28,7 @@ public class Object_Base : MonoBehaviour
     }
 
     public virtual void Attack() {
-
+        attackTarget.OnAttack(attackPower);
     }
 
     public virtual void OnAttack(float amount) {
@@ -51,7 +51,7 @@ public class Object_Base : MonoBehaviour
     }
 
     public virtual void AttackEvent() {
-        attackTarget.OnAttack(attackPower);
+        Attack();
     }
 
     public virtual void Die() {

@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     public float lifetime = 5.0f;
 
     private void Start() {
-        StartCoroutine(DestroyBullet());
+        StartCoroutine(DestroyBulletAfterLifetime());
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private IEnumerator DestroyBullet() {
+    private IEnumerator DestroyBulletAfterLifetime() {
         yield return new WaitForSeconds(lifetime);
         Destroy(gameObject);
     }
